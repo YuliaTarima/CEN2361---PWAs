@@ -53,42 +53,82 @@ document.addEventListener("DOMContentLoaded", () => {
     // }
 
     // async fetches
+    // async function fetchRhymingWordsArray(wordToRhyme) {
+    //     return await fetch(`https://api.datamuse.com/words?rel_rhy=${wordToRhyme}&max=50`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             // Extract 10 most relevant words from the data array
+    //             return data
+    //                 .sort((a, b) => b.score - a.score)
+    //                 .slice(0, 10)
+    //                 .map(item => item.word);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //             return [];
+    //         });
+    // }
+
+    // async function fetchAndInsertHTML(
+    //     {   sourceURL,
+    //         targetElementId,
+    //         wordToRhyme,
+    //         rhymingWordsOrderedList
+    //     }) {
+    //     // Use the Fetch API to get the HTML content from the specified sourceURL
+    //     return await fetch(sourceURL)
+    //         .then(response => response.text())  // Parse the response as text
+    //         .then(data => {
+    //             // Insert the fetched HTML content into the specified target element
+    //             document.getElementById(targetElementId).innerHTML = data;
+    //             populateById('cardTitle', wordToRhyme);
+    //             // populateById('cardText', rhymingWordsOrderedList);
+    //             document.getElementById('cardText').appendChild(rhymingWordsOrderedList);
+    //         })
+    //         .catch(error => console.error('Error fetching the HTML:', error));
+    // }
+
     async function fetchRhymingWordsArray(wordToRhyme) {
-        return await fetch(`https://api.datamuse.com/words?rel_rhy=${wordToRhyme}&max=10`)
-            .then(response => response.json())
-            .then(data => {
-                // Extract the words from the data array
-                return data.map(item => item.word);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                return [];
-            });
+        try {
+            const response = await fetch(`https://api.datamuse.com/words?rel_rhy=${wordToRhyme}&max=50`);
+            const data = await response.json();
+
+            // Extract 10 most relevant words from the data array
+            const topWords = data
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 10)
+                .map(item => item.word);
+
+            return topWords;
+        } catch (error) {
+            console.error('Error:', error);
+            return [];
+        }
     }
 
-    async function fetchAndInsertHTML(
-        {   sourceURL,
-            targetElementId,
-            wordToRhyme,
-            rhymingWordsOrderedList
-        }) {
-        // Use the Fetch API to get the HTML content from the specified sourceURL
-        return await fetch(sourceURL)
-            .then(response => response.text())  // Parse the response as text
-            .then(data => {
-                // Insert the fetched HTML content into the specified target element
-                document.getElementById(targetElementId).innerHTML = data;
-                populateById('cardTitle', wordToRhyme);
-                // populateById('cardText', rhymingWordsOrderedList);
-                document.getElementById('cardText').appendChild(rhymingWordsOrderedList);
-            })
-            .catch(error => console.error('Error fetching the HTML:', error));
+    async function fetchAndInsertHTML({sourceURL, targetElementId, wordToRhyme, rhymingWordsOrderedList}) {
+        try {
+            const response = await fetch(sourceURL);
+            const htmlContent = await response.text();
+
+            // Insert the fetched HTML content into the specified target element
+            const targetElement = document.getElementById(targetElementId);
+            targetElement.innerHTML = htmlContent;
+
+            // Populate the HTML content with additional data
+            populateById('cardTitle', wordToRhyme);
+            const cardTextElement = document.getElementById('cardText');
+            cardTextElement.innerHTML = ''; // Clear previous content
+            cardTextElement.appendChild(rhymingWordsOrderedList);
+        } catch (error) {
+            console.error('Error fetching the HTML:', error);
+        }
     }
 
     addGlobalEventListener(
         "submit",
         "#inputWordForm",
-        (e) => {
+        async (e) => {
             // Prevent the form from submitting the traditional way
             e.preventDefault();
 
@@ -97,27 +137,36 @@ document.addEventListener("DOMContentLoaded", () => {
             const wordToRhyme = sanitizeInput(inputWord);
             // const rhymesArr = [];
 
-            const rhymingWordsOrderedList = fetchRhymingWordsArray(wordToRhyme)
-                .then(rhymes => {
-                    console.log('rhymes', rhymes);
-                    console.log('arrayToOrderedList(rhymes)', arrayToOrderedList(rhymes))
-                    return arrayToOrderedList(rhymes)
-                }).then(rhymingWordsOrderedList => {
-                    fetchAndInsertHTML({
-                        sourceURL: 'card.html',
-                        targetElementId: 'rhymingResults',
-                        wordToRhyme,
-                        rhymingWordsOrderedList
-                    }).then(r => console.log('fetchAdndInsetHTML'))
-                })
-                .catch(error => console.error('Error:', error));
+            // const rhymingWordsOrderedList = fetchRhymingWordsArray(wordToRhyme)
+            //     .then(rhymes => {
+            //         console.log('rhymes', rhymes);
+            //         console.log('arrayToOrderedList(rhymes)', arrayToOrderedList(rhymes))
+            //         return arrayToOrderedList(rhymes)
+            //     }).then(rhymingWordsOrderedList => {
+            //         fetchAndInsertHTML({
+            //             sourceURL: 'card.html',
+            //             targetElementId: 'rhymingResults',
+            //             wordToRhyme,
+            //             rhymingWordsOrderedList
+            //         }).then(r => console.log('fetchAndInsetHTML'))
+            //     })
+            //     .catch(error => console.error('Error:', error));
 
-            // fetchAndInsertHTML({
-            //     sourceURL: 'card.html',
-            //     targetElementId: 'rhymingResults',
-            //     wordToRhyme,
-            //     rhymingWordsOrderedList
-            // }).then(r => console.debug('rhymingWordsOrderedList', rhymingWordsOrderedList))
+            try {
+                const rhymes = await fetchRhymingWordsArray(wordToRhyme);
+                const rhymingWordsOrderedList = arrayToOrderedList(rhymes);
+
+                await fetchAndInsertHTML({
+                    sourceURL: 'card.html',
+                    targetElementId: 'rhymingResults',
+                    wordToRhyme,
+                    rhymingWordsOrderedList
+                });
+
+                console.log('fetchAndInsertHTML completed');
+            } catch (error) {
+                console.error('Error:', error);
+            }
 
 
         },
