@@ -6,7 +6,7 @@ const cacheAssets = [
     'index.css',
     'app.js',
     'manifest.json',
-    'sortedWords.json'
+    'rhymes.json'
 ];
 
 // Call Install Event

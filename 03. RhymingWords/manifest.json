@@ -1,6 +1,6 @@
 {
-  "name": "Hello World PWA",
-  "short_name": "HelloPWA",
+  "name": "Rhyming Words PWA",
+  "short_name": "RhymesPWA",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
