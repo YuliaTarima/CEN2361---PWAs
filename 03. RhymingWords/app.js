@@ -131,24 +131,16 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const rhymesResultArr = [];
                 const jsonRhymesArray = await fetchRhymingWordsArrayJson('./rhymes.json');
-                console.log('initial jsonRhymesArray', jsonRhymesArray);
 
                 const rhymesMatchFromJson = findRhymesByLastTwoLetters(wordToRhyme, jsonRhymesArray)
                 if (rhymesMatchFromJson.length === 0) {
-                    console.log('!rhymesMatchFromJson', rhymesMatchFromJson, rhymesMatchFromJson.length);
                     const rhymesFromAPI = await fetchRhymingWordsArrayAPI(wordToRhyme);
-                    console.log('newJson', appendApiRhymesToJsonArr(wordToRhyme, rhymesFromAPI, jsonRhymesArray));
-                    // rhymesResultArr.push(rhymesFromAPI);
-                    rhymesFromAPI.forEach(rhyme => rhymesResultArr.push(rhyme));
+                             rhymesFromAPI.forEach(rhyme => rhymesResultArr.push(rhyme));
                 } else {
-                    console.log('rhymesMatchFromJson', rhymesMatchFromJson);
-                    // rhymesResultArr.push(rhymesMatchFromJson);
                     rhymesMatchFromJson.forEach(rhyme => rhymesResultArr.push(rhyme));
                 }
-                // console.log('rhymesResultArr', rhymesResultArr, 'typeof ', typeof (rhymesResultArr));
 
                 const rhymesResultHTML = arrayToOrderedList(rhymesResultArr);
-                console.log('rhymesResultsHTML', rhymesResultHTML);
 
                 await fetchAndInsertHTML({
                     sourceURL: 'card.html',
@@ -163,8 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // { once: true }
     )
 
-})
-;
+});
 
 
 
