@@ -6,7 +6,8 @@ const cacheAssets = [
     'index.css',
     'app.js',
     'manifest.json',
-    'rhymes.json'
+    'rhymes.json',
+    'favicon.ico',
 ];
 
 // Call Install Event
