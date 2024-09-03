@@ -11,7 +11,6 @@ if ('serviceWorker' in navigator) {
     })
 }
 
-
 function sanitizeInput(inputValue) {
     // Check if sanitized input contains only letters and spaces
     const isTextual = /^[a-zA-Z\s]*$/.test(inputValue.trim());
@@ -52,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById(targetElementId).innerHTML = contentToInsert;
     }
 
-    async function fetchRhymingWordsArray(wordToRhyme) {
+    async function fetchRhymingWordsArrayAPI(wordToRhyme) {
         try {
             const response = await fetch(`https://api.datamuse.com/words?rel_rhy=${wordToRhyme}&max=50`);
             const data = await response.json();
@@ -69,89 +68,96 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    async function getFileData(filePath) {
-        // const fileData = await import(filePath);
-        // // If using dynamic import, the content is accessed via `.default`
-        // console.log(fileData.default);
-        // JSON.parse(fileData);
-        // return fileData.default;
+    async function fetchRhymingWordsArrayJson(filePath) {
         const response = await fetch(filePath);
         return await response.json();
     }
 
-async function appendToOrderedWordsFile(wordToRhyme, rhymes) {
-    // // Read the existing JSON data
-    // const orderedWordsArray = await getFileData('./sortedWords.json');
-    // console.log('orderedWordsArray', orderedWordsArray);
+    function findRhymesByLastTwoLetters(wordToRhyme, rhymesArray) {
+        // Extract the last two letters of the wordToRhyme
+        const lastTwoLetters = wordToRhyme.slice(-2);
 
-    // import fileData from './sortedWords.json';
+        // Iterate through the rhymesArray to find a match
+        for (const rhymeObject of rhymesArray) {
+            const rhymeWordLastTwoLetters = rhymeObject.word.slice(-2);
 
-    // Create a new entry
-    const newEntry = {
-        word: wordToRhyme,
-        rhymes: rhymes
-    };
-
-    // Append the new entry to the array
-    // orderedWordsArray.push(newEntry);
-    //const jsonString = JSON.stringify(orderedWordsJson);
-
-}
-
-async function fetchAndInsertHTML({sourceURL, targetElementId, wordToRhyme, rhymingWordsOrderedList}) {
-    try {
-        const response = await fetch(sourceURL);
-        const htmlContent = await response.text();
-
-        // Insert html into target element
-        document.getElementById(targetElementId).innerHTML = htmlContent;
-        // Populate html
-        populateById('cardTitle', wordToRhyme);
-        document.getElementById('cardText').appendChild(rhymingWordsOrderedList);
-
-    } catch (error) {
-        console.error('Error fetching the HTML:', error);
-    }
-}
-
-addGlobalEventListener(
-    "submit",
-    "#inputWordForm",
-    async (e) => {
-        // Do not submit the traditional way
-        e.preventDefault();
-
-        // Get the value from the input field and sanitize it
-        const inputWord = e.target.querySelector('#inputWord').value;
-        const wordToRhyme = sanitizeInput(inputWord);
-
-        try {
-            const jsonArray = await getFileData('./sortedWords.json');
-            console.log('jsonArray', jsonArray);
-
-            /*TODO:
-            check if wordToRhyme rhymes with anything in json Array
-            if rhymes output json
-            else fetch from API
-            then append API results to rhymes.json
-            * */
-            const rhymes = await fetchRhymingWordsArray(wordToRhyme);
-            // await appendToOrderedWordsFile(wordToRhyme, rhymes);
-
-            const rhymingWordsOrderedList = arrayToOrderedList(rhymes);
-
-            await fetchAndInsertHTML({
-                sourceURL: 'card.html',
-                targetElementId: 'rhymingResults',
-                wordToRhyme,
-                rhymingWordsOrderedList
-            });
-        } catch (error) {
-            console.error('Error:', error);
+            // Compare the last two letters
+            if (rhymeWordLastTwoLetters === lastTwoLetters) {
+                return rhymeObject.rhymes;
+            }
         }
-    },
-    // { once: true }
-)
+
+        // Return an empty array if no match is found
+        return [];
+    }
+
+
+    function appendApiRhymesToJsonArr(wordToRhyme, rhymes, arr) {
+        const newEntry = {
+            word: wordToRhyme,
+            rhymes: rhymes
+        };
+        arr.push(newEntry);
+        return arr;
+    }
+
+    async function fetchAndInsertHTML({sourceURL, targetElementId, wordToRhyme, rhymingWordsOrderedList}) {
+        try {
+            const response = await fetch(sourceURL);
+            const htmlContent = await response.text();
+
+            // Insert html into target element
+            document.getElementById(targetElementId).innerHTML = htmlContent;
+            // Populate html
+            populateById('cardTitle', wordToRhyme);
+            document.getElementById('cardText').appendChild(rhymingWordsOrderedList);
+
+        } catch (error) {
+            console.error('Error fetching the HTML:', error);
+        }
+    }
+
+    addGlobalEventListener(
+        "submit",
+        "#inputWordForm",
+        async (e) => {
+            // Do not submit the traditional way
+            e.preventDefault();
+
+            // Get the value from the input field and sanitize it
+            const inputWord = e.target.querySelector('#inputWord').value;
+            const wordToRhyme = sanitizeInput(inputWord);
+
+            try {
+                const jsonRhymesArray = await fetchRhymingWordsArrayJson('./sortedWords.json');
+                console.log('initial jsonRhymesArray', jsonRhymesArray);
+
+
+                //
+                const rhymesMatchFromJson = findRhymesByLastTwoLetters(wordToRhyme, jsonRhymesArray)
+
+                if (!rhymesMatchFromJson) {
+                    console.log('!rhymesMatchFromJson', rhymesMatchFromJson)
+                } else {
+                    console.log('!rhymesMatchFromJson', rhymesMatchFromJson)
+                }
+                const rhymesFromAPI = await fetchRhymingWordsArrayAPI(wordToRhyme);
+                console.log('newJson', appendApiRhymesToJsonArr(wordToRhyme, rhymesFromAPI, jsonRhymesArray));
+
+                const rhymingWordsOrderedList = arrayToOrderedList(rhymesFromAPI);
+
+                await fetchAndInsertHTML({
+                    sourceURL: 'card.html',
+                    targetElementId: 'rhymingResults',
+                    wordToRhyme,
+                    rhymingWordsOrderedList
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        },
+        // { once: true }
+    )
 
 })
 ;

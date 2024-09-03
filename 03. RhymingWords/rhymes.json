@@ -8,5 +8,15 @@
       "rat",
       "sat"
     ]
+  },
+  {
+    "word": "dog",
+    "rhymes": [
+      "fog",
+      "log",
+      "jog",
+      "bog",
+      "clog"
+    ]
   }
 ]
