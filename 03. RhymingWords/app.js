@@ -146,6 +146,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (rhymesMatchFromJson.length === 0) {
                     const rhymesFromAPI = await fetchRhymingWordsArrayAPI(wordToRhyme);
                              rhymesFromAPI.forEach(rhyme => rhymesResultArr.push(rhyme));
+                             /*TODO
+                             append fetched values to json file
+                              */
                 } else {
                     rhymesMatchFromJson.forEach(rhyme => rhymesResultArr.push(rhyme));
                 }
