@@ -63,6 +63,8 @@ function appendApiRhymesToJsonArr(wordToRhyme, rhymes, arr) {
     return arr;
 }
 
+
+
 document.addEventListener("DOMContentLoaded", () => {
     function addGlobalEventListener(type, selector, callback, options) {
         document.addEventListener(
@@ -73,6 +75,14 @@ document.addEventListener("DOMContentLoaded", () => {
             options
         );
     }
+
+    function addFooter(){
+        const copyrightElement = document.getElementById("copyright");
+        const currentYear = new Date().getFullYear();
+        copyrightElement.innerHTML = `&copy; ${currentYear} Yulia Tarima. All rights reserved`;
+
+    }
+    addFooter();
 
     function populateById(targetElementId, contentToInsert) {
         document.getElementById(targetElementId).innerHTML = contentToInsert;

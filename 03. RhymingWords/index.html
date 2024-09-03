@@ -2,31 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Rhyming Words PWA</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="index.css" rel="stylesheet">
 </head>
 <body>
+<div id="wrapper">
+    <header>
+        <div id="logo"></div>
+        <h1>Rhyming Words PWA</h1>
+    </header>
+    <main class="shadow">
+        <div class="container mt-5">
+            <form class="form-inline" id="inputWordForm">
+                <label class="mr-2" for="inputWord">Enter Word:</label>
+                <input class="form-control mr-2" id="inputWord" maxlength="15" placeholder="Word" type="text">
+                <button class="btn btn-primary" id="submit" type="submit">Submit</button>
+            </form>
+            <div id="rhymingResults">
+                <!-- Fetched content will be inserted here -->
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div id="copyright"></div>
+    </footer>
 
-<div class="container mt-5">
-    <form class="form-inline" id="inputWordForm">
-        <label for="inputWord" class="mr-2">Enter Word:</label>
-        <input type="text" class="form-control mr-2" id="inputWord" placeholder="Word" maxlength="15">
-        <button type="submit" class="btn btn-primary" id="submit">Submit</button>
-    </form>
-
-    <div id="rhymingResults">
-        <!-- Fetched content will be inserted here -->
-    </div>
+    <script src="app.js"></script>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </div>
-
-<script src="app.js"></script>
-<!-- Bootstrap JS and dependencies -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </body>
 </html>
