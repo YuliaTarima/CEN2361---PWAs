@@ -36,6 +36,33 @@ function arrayToOrderedList(array) {
     return ol;
 }
 
+function findRhymesByLastTwoLetters(wordToRhyme, rhymesArray) {
+    // Extract the last two letters of the wordToRhyme
+    const lastTwoLetters = wordToRhyme.slice(-2).toLowerCase();
+
+    // Iterate through the rhymesArray to find a match
+    for (const rhymeObject of rhymesArray) {
+        const rhymeWordLastTwoLetters = rhymeObject.word.slice(-2).toLowerCase();
+
+        // Compare the last two letters
+        if (rhymeWordLastTwoLetters === lastTwoLetters) {
+            return rhymeObject.rhymes;
+        }
+    }
+
+    // Return an empty array if no match is found
+    return [];
+}
+
+function appendApiRhymesToJsonArr(wordToRhyme, rhymes, arr) {
+    const newEntry = {
+        word: wordToRhyme,
+        rhymes: rhymes
+    };
+    arr.push(newEntry);
+    return arr;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     function addGlobalEventListener(type, selector, callback, options) {
         document.addEventListener(
@@ -73,35 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return await response.json();
     }
 
-    function findRhymesByLastTwoLetters(wordToRhyme, rhymesArray) {
-        // Extract the last two letters of the wordToRhyme
-        const lastTwoLetters = wordToRhyme.slice(-2);
-
-        // Iterate through the rhymesArray to find a match
-        for (const rhymeObject of rhymesArray) {
-            const rhymeWordLastTwoLetters = rhymeObject.word.slice(-2);
-
-            // Compare the last two letters
-            if (rhymeWordLastTwoLetters === lastTwoLetters) {
-                return rhymeObject.rhymes;
-            }
-        }
-
-        // Return an empty array if no match is found
-        return [];
-    }
-
-
-    function appendApiRhymesToJsonArr(wordToRhyme, rhymes, arr) {
-        const newEntry = {
-            word: wordToRhyme,
-            rhymes: rhymes
-        };
-        arr.push(newEntry);
-        return arr;
-    }
-
-    async function fetchAndInsertHTML({sourceURL, targetElementId, wordToRhyme, rhymingWordsOrderedList}) {
+    async function fetchAndInsertHTML({sourceURL, targetElementId, wordToRhyme, rhymesResultHTML}) {
         try {
             const response = await fetch(sourceURL);
             const htmlContent = await response.text();
@@ -110,7 +109,8 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById(targetElementId).innerHTML = htmlContent;
             // Populate html
             populateById('cardTitle', wordToRhyme);
-            document.getElementById('cardText').appendChild(rhymingWordsOrderedList);
+            // populateById('cardText', rhymesResultArr);
+            document.getElementById('cardText').appendChild(rhymesResultHTML);
 
         } catch (error) {
             console.error('Error fetching the HTML:', error);
@@ -129,28 +129,32 @@ document.addEventListener("DOMContentLoaded", () => {
             const wordToRhyme = sanitizeInput(inputWord);
 
             try {
-                const jsonRhymesArray = await fetchRhymingWordsArrayJson('./sortedWords.json');
+                const rhymesResultArr = [];
+                const jsonRhymesArray = await fetchRhymingWordsArrayJson('./rhymes.json');
                 console.log('initial jsonRhymesArray', jsonRhymesArray);
 
-
-                //
                 const rhymesMatchFromJson = findRhymesByLastTwoLetters(wordToRhyme, jsonRhymesArray)
-
-                if (!rhymesMatchFromJson) {
-                    console.log('!rhymesMatchFromJson', rhymesMatchFromJson)
+                if (rhymesMatchFromJson.length === 0) {
+                    console.log('!rhymesMatchFromJson', rhymesMatchFromJson, rhymesMatchFromJson.length);
+                    const rhymesFromAPI = await fetchRhymingWordsArrayAPI(wordToRhyme);
+                    console.log('newJson', appendApiRhymesToJsonArr(wordToRhyme, rhymesFromAPI, jsonRhymesArray));
+                    // rhymesResultArr.push(rhymesFromAPI);
+                    rhymesFromAPI.forEach(rhyme => rhymesResultArr.push(rhyme));
                 } else {
-                    console.log('!rhymesMatchFromJson', rhymesMatchFromJson)
+                    console.log('rhymesMatchFromJson', rhymesMatchFromJson);
+                    // rhymesResultArr.push(rhymesMatchFromJson);
+                    rhymesMatchFromJson.forEach(rhyme => rhymesResultArr.push(rhyme));
                 }
-                const rhymesFromAPI = await fetchRhymingWordsArrayAPI(wordToRhyme);
-                console.log('newJson', appendApiRhymesToJsonArr(wordToRhyme, rhymesFromAPI, jsonRhymesArray));
+                // console.log('rhymesResultArr', rhymesResultArr, 'typeof ', typeof (rhymesResultArr));
 
-                const rhymingWordsOrderedList = arrayToOrderedList(rhymesFromAPI);
+                const rhymesResultHTML = arrayToOrderedList(rhymesResultArr);
+                console.log('rhymesResultsHTML', rhymesResultHTML);
 
                 await fetchAndInsertHTML({
                     sourceURL: 'card.html',
                     targetElementId: 'rhymingResults',
                     wordToRhyme,
-                    rhymingWordsOrderedList
+                    rhymesResultHTML,
                 });
             } catch (error) {
                 console.error('Error:', error);
