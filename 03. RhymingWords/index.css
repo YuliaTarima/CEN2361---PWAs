@@ -8,7 +8,7 @@ body, html {
     font: 13px "Century Gothic", "Helvetica", "Arial" !important;
     letter-spacing: 1px !important;
     line-height: 145% !important;
-    }
+}
 
 /* Flexbox container to hold header, main, and footer */
 #wrapper {
@@ -16,6 +16,7 @@ body, html {
     flex-direction: column;
     min-height: 100vh;
 }
+
 main {
     flex: 1;
     margin: 3em auto;
@@ -45,6 +46,7 @@ header {
     background-image: url('../images/logo.gif');
     background-repeat: no-repeat;
 }
+
 footer {
     background-image: url('../images/footer.gif');
     opacity: 0.7;
@@ -66,9 +68,20 @@ footer {
 
 .card {
     margin: 2em auto;
-.shadow {
-    box-shadow: 0px 4px 10px #7dabab;
 }
+
+.shadow {
+    box-shadow: 0 4px 10px #7dabab;
+}
+
 form {
     padding: 2em;
 }
+
+.submitBtn {
+    background-color: #7dabab;
+}
+.roundedCorners {
+    border-radius: 8px; /* Adjust the value to get the desired corner radius */
+}
+
