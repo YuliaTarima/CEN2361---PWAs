@@ -63,8 +63,6 @@ function appendApiRhymesToJsonArr(wordToRhyme, rhymes, arr) {
     return arr;
 }
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
     function addGlobalEventListener(type, selector, callback, options) {
         document.addEventListener(
