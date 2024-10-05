@@ -23,25 +23,25 @@
       "grinner",
       "thinner",
       "beginner",
-      "chinner",
-      "dinner",
       "inner",
-      "finner"
+      "finner",
+      "binner",
+      "kinner"
     ]
   },
   {
     "word": "candle",
     "rhymes": [
       "handle",
-      "bandle",
-      "sandals",
-      "strandle",
       "vandal",
-      "glandle",
-      "mandle",
-      "randal",
-      "pandal",
-      "shandle"
+      "sandlot",
+      "tandem",
+      "mantle",
+      "bandit",
+      "dandle",
+      "randle",
+      "paddle",
+      "sandal"
     ]
   },
   {
@@ -51,12 +51,12 @@
       "beacher",
       "feature",
       "creature",
-      "screech-er",
-      "reach-er",
-      "leech-er",
+      "leacher",
       "breacher",
-      "each-er",
-      "beach-er"
+      "reacher",
+      "seacher",
+      "peacher",
+      "fleacher"
     ]
   },
   {
@@ -70,8 +70,8 @@
       "emotion",
       "promotion",
       "locomotion",
-      "cohesion",
-      "explosion"
+      "erosion",
+      "proportion"
     ]
   },
   {
@@ -81,12 +81,12 @@
       "asset",
       "closet",
       "offset",
-      "format",
       "inset",
       "reset",
       "mindset",
       "outset",
-      "discreet"
+      "preset",
+      "cassette"
     ]
   },
   {
@@ -94,14 +94,14 @@
     "rhymes": [
       "fountain",
       "countin'",
-      "shoutin'",
-      "dauntin'",
+      "bountain",
+      "gountain",
+      "hountain",
       "mountin'",
-      "bountin'",
-      "pountin'",
-      "frontin'",
-      "snoutin'",
-      "floutin'"
+      "sountain",
+      "tountain",
+      "vountain",
+      "wountain"
     ]
   },
   {
@@ -111,12 +111,12 @@
       "rattle",
       "paddle",
       "tattle",
-      "gaddle",
       "saddle",
       "battle",
-      "squatle",
-      "baddle",
-      "faddle"
+      "sattle",
+      "gaddle",
+      "faddle",
+      "haddle"
     ]
   },
   {
@@ -135,33 +135,18 @@
     ]
   },
   {
-    "word": "cousin",
-    "rhymes": [
-      "buzzin'",
-      "fuzzin'",
-      "wasn't",
-      "cousin",
-      "dozen",
-      "bluzzin'",
-      "guzzin'",
-      "muzzin'",
-      "huzzin'",
-      "fuzzin'"
-    ]
-  },
-  {
     "word": "paper",
     "rhymes": [
       "taper",
       "graper",
       "shaper",
       "vapor",
-      "taper",
       "scraper",
       "caper",
-      "taper",
-      "zaper",
-      "gaper"
+      "caper",
+      "graper",
+      "gaper",
+      "daper"
     ]
   }
 ]
