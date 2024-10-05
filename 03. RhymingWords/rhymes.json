@@ -1,22 +1,167 @@
 [
   {
-    "word": "cat",
+    "word": "happy",
     "rhymes": [
-      "bat",
-      "hat",
-      "mat",
-      "rat",
-      "sat"
+      "sappy",
+      "nappy",
+      "clappy",
+      "flappy",
+      "snappy",
+      "tappy",
+      "scrappy",
+      "crappy",
+      "trappy",
+      "zappy"
     ]
   },
   {
-    "word": "dog",
+    "word": "dinner",
     "rhymes": [
-      "fog",
-      "log",
-      "jog",
-      "bog",
-      "clog"
+      "winner",
+      "spinner",
+      "sinner",
+      "grinner",
+      "thinner",
+      "beginner",
+      "chinner",
+      "dinner",
+      "inner",
+      "finner"
+    ]
+  },
+  {
+    "word": "candle",
+    "rhymes": [
+      "handle",
+      "bandle",
+      "sandals",
+      "strandle",
+      "vandal",
+      "glandle",
+      "mandle",
+      "randal",
+      "pandal",
+      "shandle"
+    ]
+  },
+  {
+    "word": "teacher",
+    "rhymes": [
+      "preacher",
+      "beacher",
+      "feature",
+      "creature",
+      "screech-er",
+      "reach-er",
+      "leech-er",
+      "breacher",
+      "each-er",
+      "beach-er"
+    ]
+  },
+  {
+    "word": "ocean",
+    "rhymes": [
+      "motion",
+      "potion",
+      "notion",
+      "devotion",
+      "commotion",
+      "emotion",
+      "promotion",
+      "locomotion",
+      "cohesion",
+      "explosion"
+    ]
+  },
+  {
+    "word": "sunset",
+    "rhymes": [
+      "upset",
+      "asset",
+      "closet",
+      "offset",
+      "format",
+      "inset",
+      "reset",
+      "mindset",
+      "outset",
+      "discreet"
+    ]
+  },
+  {
+    "word": "mountain",
+    "rhymes": [
+      "fountain",
+      "countin'",
+      "shoutin'",
+      "dauntin'",
+      "mountin'",
+      "bountin'",
+      "pountin'",
+      "frontin'",
+      "snoutin'",
+      "floutin'"
+    ]
+  },
+  {
+    "word": "bottle",
+    "rhymes": [
+      "cattle",
+      "rattle",
+      "paddle",
+      "tattle",
+      "gaddle",
+      "saddle",
+      "battle",
+      "squatle",
+      "baddle",
+      "faddle"
+    ]
+  },
+  {
+    "word": "river",
+    "rhymes": [
+      "giver",
+      "quiver",
+      "sliver",
+      "shiver",
+      "liver",
+      "deliver",
+      "cliver",
+      "fiver",
+      "driver",
+      "striver"
+    ]
+  },
+  {
+    "word": "cousin",
+    "rhymes": [
+      "buzzin'",
+      "fuzzin'",
+      "wasn't",
+      "cousin",
+      "dozen",
+      "bluzzin'",
+      "guzzin'",
+      "muzzin'",
+      "huzzin'",
+      "fuzzin'"
+    ]
+  },
+  {
+    "word": "paper",
+    "rhymes": [
+      "taper",
+      "graper",
+      "shaper",
+      "vapor",
+      "taper",
+      "scraper",
+      "caper",
+      "taper",
+      "zaper",
+      "gaper"
     ]
   }
 ]

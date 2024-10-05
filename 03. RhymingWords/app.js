@@ -36,13 +36,13 @@ function arrayToOrderedList(array) {
     return ol;
 }
 
-function findRhymesByLastTwoLetters(wordToRhyme, rhymesArray) {
+function findRhymesByLastThreeLetters(wordToRhyme, rhymesArray) {
     // Extract the last two letters of the wordToRhyme
-    const lastTwoLetters = wordToRhyme.slice(-2).toLowerCase();
+    const lastTwoLetters = wordToRhyme.slice(-3).toLowerCase();
 
     // Iterate through the rhymesArray to find a match
     for (const rhymeObject of rhymesArray) {
-        const rhymeWordLastTwoLetters = rhymeObject.word.slice(-2).toLowerCase();
+        const rhymeWordLastTwoLetters = rhymeObject.word.slice(-3).toLowerCase();
 
         // Compare the last two letters
         if (rhymeWordLastTwoLetters === lastTwoLetters) {
@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const rhymesResultArr = [];
                 const jsonRhymesArray = await fetchRhymingWordsArrayJson('./rhymes.json');
 
-                const rhymesMatchFromJson = findRhymesByLastTwoLetters(wordToRhyme, jsonRhymesArray)
+                const rhymesMatchFromJson = findRhymesByLastThreeLetters(wordToRhyme, jsonRhymesArray)
                 if (rhymesMatchFromJson.length === 0) {
                     const rhymesFromAPI = await fetchRhymingWordsArrayAPI(wordToRhyme);
                              rhymesFromAPI.forEach(rhyme => rhymesResultArr.push(rhyme));
