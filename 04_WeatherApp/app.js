@@ -44,7 +44,7 @@ request.onupgradeneeded = (event) => {
 // ###############################################
 
 // Define the API key for accessing the Weatherbit API
-const API_KEY = '3822380c32db4d28a5ac8e4f7022c430'; //#####_change_1
+const API_KEY = '3822380c32db4d28a5ac8e4f7022c430'; //
 
 // Define the base URL for the Weatherbit current weather API
 const API_URL = 'https://api.weatherbit.io/v2.0/current';
