@@ -1,17 +1,21 @@
 {
-  "name": "node_push_notification",
+  "name": "yulia_node_push_notification",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
-    "express": "^4.16.3",
+    "express": "^4.21.0",
     "web-push": "^3.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
   }
 }
