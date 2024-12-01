@@ -241,7 +241,8 @@ class MessagingApp {
     // Send message to ChatGPT API
     async sendToChatGPT(message) {
         try {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            const gptUrl = 'https://api.openai.com/v1/chat/completions';
+            const response = await fetch(gptUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -254,6 +255,7 @@ class MessagingApp {
             });
 
             const data = await response.json();
+            console.log(`gptData = ${data}`);
             this.addMessageToHistory('assistant', data.choices[0].message.content);
             this.saveMessageHistory();
         } catch (error) {

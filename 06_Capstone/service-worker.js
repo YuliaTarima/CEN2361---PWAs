@@ -9,7 +9,7 @@ const ASSETS_TO_CACHE = [
     '/offline-page.html',
     '/favicon.ico',
     '/YuliaCapstone.png'
- 
+
 ];
 
 // Install event
@@ -42,33 +42,40 @@ self.addEventListener('fetch', (event) => {
     if (!event.request.url.startsWith(self.location.origin)) {
         return;
     }
+    // Only handle GET requests per Cache API specs
+    // to avoid cashing sensitive data for security reasons
+    if (event.request.method !== 'GET') {
+        return;
+    }
 
     event.respondWith(
         caches.match(event.request)
             .then(response => {
                 if (response) {
+                    // Return cached response if available
                     return response;
                 }
 
-                return fetch(event.request).then(response => {
-                    // Don't cache non-successful responses
-                    if (!response || response.status !== 200 || response.type !== 'basic') {
+                return fetch(event.request)
+                    .then(response => {
+                        // Don't cache non-successful responses
+                        if (!response || response.status !== 200 || response.type !== 'basic') {
+                            return response;
+                        }
+
+                        // Clone the response
+                        const responseToCache = response.clone();
+
+                        caches.open(CACHE_NAME)
+                            .then(cache => {
+                                cache.put(event.request, responseToCache);
+                            });
+
                         return response;
-                    }
-
-                    // Clone the response
-                    const responseToCache = response.clone();
-
-                    caches.open(CACHE_NAME)
-                        .then(cache => {
-                            cache.put(event.request, responseToCache);
-                        });
-
-                    return response;
-                });
+                    });
             })
             .catch(() => {
-                // Return offline page for navigation requests
+                // Handle errors gracefully: return offline page for navigation requests
                 if (event.request.mode === 'navigate') {
                     return caches.match('/offline-page.html');
                 }

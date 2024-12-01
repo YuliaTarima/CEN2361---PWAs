@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "scripts": {
         "build": "deno run -A build.ts",
-        "start": "npx http-server"
+        "start": "npx http-server",
+        "run": "browser-sync start --server --files index.html"
     },
     "dependencies": {
         "openai": "^4.73.1"
