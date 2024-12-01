@@ -46,12 +46,14 @@ class MessagingApp {
     async sendToChatGPT(message) {
         try {
             const gptUrl = 'https://api.openai.com/v1/chat/completions';
-            const openAPIKey = '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';
+            // WARNING: This API key is included for educational purposes only.
+            // Do not use this key in production or share it publicly.
+            const openAIKey = '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';
             const response = await fetch(gptUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${openAPIKey}`,
+                    'Authorization': `Bearer ${openAIKey}`,
                 },
                 body: JSON.stringify({
                     model: "gpt-4o-mini",
@@ -136,4 +138,5 @@ class MessagingApp {
         this.saveMessageQueue();
     }
 }
+
 export default MessagingApp;

@@ -7,10 +7,10 @@
         "start": "browser-sync start --server --files '*.html, *.css, *.js'"
     },
     "dependencies": {
+        "crypto-js": "^4.2.0",
         "openai": "^4.73.1"
     },
     "devDependencies": {
         "browser-sync": "^2.27.7"
     }
 }
-
