@@ -7,7 +7,8 @@ const ASSETS_TO_CACHE = [
     '/app.js',
     '/manifest.json',
     '/offline-page.html',
-    '/DeshCapstone.png'
+    '/favicon.ico',
+    '/YuliaCapstone.png'
  
 ];
 
@@ -86,7 +87,7 @@ self.addEventListener('sync', (event) => {
 self.addEventListener('push', (event) => {
     const options = {
         body: event.data ? event.data.text() : 'New message received',
-        icon: '/DeshCapstone.png',
+        icon: '/YuliaCapstone.png',
         badge: '/icons/icon-72x72.png',
         vibrate: [100, 50, 100],
         data: {
@@ -106,7 +107,7 @@ self.addEventListener('push', (event) => {
     };
 
     event.waitUntil(
-        self.registration.showNotification('DeshDrawChat', options)
+        self.registration.showNotification('YuliaDrawChat', options)
     );
 });
 

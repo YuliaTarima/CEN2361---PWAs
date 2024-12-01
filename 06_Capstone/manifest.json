@@ -1,19 +1,19 @@
 {
-    "name": "Desh Draw & Chat PWA",
-    "short_name": "DeshDrawChat",
+    "name": "Yulia's Draw & Chat PWA",
+    "short_name": "YuliaDrawChat",
     "start_url": "/index.html",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#317EFB",
     "icons": [
         {
-            "src": "DeshCapstone.png",
-            "sizes": "192x192",
-            "type": "image/png"
+            "src": "favicon.ico",
+            "sizes": "32x32",
+            "type": "image/x-icon"
         },
         {
-            "src": "icons/icon-512x512.png",
-            "sizes": "512x512",
+            "src": "YuliaCapstone.png",
+            "sizes": "192x192",
             "type": "image/png"
         }
     ]

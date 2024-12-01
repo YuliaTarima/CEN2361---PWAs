@@ -1,17 +1,18 @@
 // PWA and Service Worker initialization
 class PWAManager {
+    // Register the service worker if supported
     static async initialize() {
         if ('serviceWorker' in navigator) {
             try {
                 const registration = await navigator.serviceWorker.register('/service-worker.js');
                 console.log('ServiceWorker registration successful:', registration);
-                
-                // Set up push notifications
+
+                // Request notification permissions if available
                 if ('Notification' in window) {
                     const permission = await Notification.requestPermission();
                     console.log('Notification permission:', permission);
                 }
-                
+
                 return registration;
             } catch (error) {
                 console.error('ServiceWorker registration failed:', error);
@@ -21,6 +22,7 @@ class PWAManager {
     }
 }
 
+// UI Manager to handle app UI setup and theming
 class UIManager {
     constructor() {
         this.initializeUI();
@@ -28,11 +30,11 @@ class UIManager {
         this.setupConnectionStatus();
     }
 
+    // Initialize app shell elements
     initializeUI() {
-        // Add app shell elements
         document.body.innerHTML = `
             <div class="app-header">
-                <h1>DeshDrawChat</h1>
+                <h1>YuliaDrawChat</h1>
                 <div class="connection-status" id="connectionStatus"></div>
                 <button id="installPWA" class="hidden">Install App</button>
             </div>
@@ -57,8 +59,8 @@ class UIManager {
         `;
     }
 
+    // Handle theme detection and application
     setupThemeHandling() {
-        // Add theme detection and handling
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
         const handleThemeChange = (e) => {
             document.body.classList.toggle('dark-theme', e.matches);
@@ -67,6 +69,7 @@ class UIManager {
         handleThemeChange(prefersDark);
     }
 
+    // Update connection status UI
     setupConnectionStatus() {
         const statusElement = document.getElementById('connectionStatus');
         const updateConnectionStatus = () => {
@@ -79,6 +82,7 @@ class UIManager {
     }
 }
 
+// Drawing App to manage canvas interactions
 class DrawingApp {
     constructor() {
         this.canvas = document.getElementById('drawingCanvas');
@@ -89,8 +93,8 @@ class DrawingApp {
         this.setupTouchEvents();
     }
 
+    // Resize the canvas and configure settings
     setupCanvas() {
-        // Make canvas responsive
         const resizeCanvas = () => {
             const rect = this.canvas.parentElement.getBoundingClientRect();
             this.canvas.width = rect.width;
@@ -104,8 +108,8 @@ class DrawingApp {
         window.addEventListener('resize', resizeCanvas);
     }
 
+    // Add touch support for canvas
     setupTouchEvents() {
-        // Add touch support
         this.canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             const touch = e.touches[0];
@@ -133,6 +137,7 @@ class DrawingApp {
         });
     }
 
+    // Add event listeners for drawing actions
     addEventListeners() {
         this.canvas.addEventListener('mousedown', this.startDrawing.bind(this));
         this.canvas.addEventListener('mousemove', this.draw.bind(this));
@@ -154,6 +159,7 @@ class DrawingApp {
         document.getElementById('downloadDrawing').addEventListener('click', this.downloadDrawing.bind(this));
     }
 
+    // Start drawing on canvas
     startDrawing(e) {
         this.isDrawing = true;
         const rect = this.canvas.getBoundingClientRect();
@@ -163,6 +169,7 @@ class DrawingApp {
         this.ctx.moveTo(x, y);
     }
 
+    // Draw lines on the canvas
     draw(e) {
         if (!this.isDrawing) return;
         const rect = this.canvas.getBoundingClientRect();
@@ -172,12 +179,13 @@ class DrawingApp {
         this.ctx.stroke();
     }
 
+    // Stop drawing on the canvas
     stopDrawing() {
         this.isDrawing = false;
     }
 
+    // Download the current drawing
     downloadDrawing() {
-        // Add timestamp to filename
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         const link = document.createElement('a');
         link.download = `drawing-${timestamp}.jpg`;
@@ -186,6 +194,7 @@ class DrawingApp {
     }
 }
 
+// Messaging App to manage chat functionality
 class MessagingApp {
     constructor() {
         this.messageHistory = document.getElementById('messageHistory');
@@ -196,6 +205,7 @@ class MessagingApp {
         this.loadMessageHistory();
     }
 
+    // Add event listeners for messaging
     setupEventListeners() {
         this.sendButton.addEventListener('click', () => this.sendMessage());
         this.messageInput.addEventListener('keypress', (e) => {
@@ -205,13 +215,13 @@ class MessagingApp {
             }
         });
 
-        // Handle offline/online events
         window.addEventListener('online', () => this.processMessageQueue());
         window.addEventListener('offline', () => {
             this.addMessageToHistory('system', 'You are currently offline. Messages will be sent when connection is restored.');
         });
     }
 
+    // Send a message
     async sendMessage() {
         const message = this.messageInput.value.trim();
         if (!message) return;
@@ -228,22 +238,18 @@ class MessagingApp {
         }
     }
 
+    // Send message to ChatGPT API
     async sendToChatGPT(message) {
         try {
             const response = await fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer API-KEY-HERE`
-                    'Authorization': `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`
-                    // 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
+                    'Authorization': `Bearer YOUR_API_KEY`
                 },
                 body: JSON.stringify({
                     model: "gpt-4o-mini",
-                    messages: [{
-                        role: "user",
-                        content: message
-                    }]
+                    messages: [{ role: "user", content: message }]
                 })
             });
 
@@ -256,6 +262,7 @@ class MessagingApp {
         }
     }
 
+    // Add message to chat history
     addMessageToHistory(role, content) {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message', role);
@@ -265,65 +272,40 @@ class MessagingApp {
         this.saveMessageHistory();
     }
 
+    // Save chat history to local storage
     saveMessageHistory() {
         const messages = Array.from(this.messageHistory.children).map(msg => ({
             role: msg.classList[1],
-            content: msg.textContent
+            content: msg.textContent.split(': ').slice(1).join(': ')
         }));
         localStorage.setItem('messageHistory', JSON.stringify(messages));
     }
 
+    // Load chat history from local storage
     loadMessageHistory() {
-        const savedMessages = localStorage.getItem('messageHistory');
-        if (savedMessages) {
-            JSON.parse(savedMessages).forEach(msg => {
-                this.addMessageToHistory(msg.role, msg.content);
-            });
-        }
+        const savedMessages = JSON.parse(localStorage.getItem('messageHistory') || '[]');
+        savedMessages.forEach(msg => this.addMessageToHistory(msg.role, msg.content));
     }
 
+    // Save message queue to local storage
     saveMessageQueue() {
         localStorage.setItem('messageQueue', JSON.stringify(this.messageQueue));
     }
 
+    // Process queued messages when online
     async processMessageQueue() {
-        const savedQueue = localStorage.getItem('messageQueue');
-        if (savedQueue) {
-            this.messageQueue = JSON.parse(savedQueue);
-        }
-
         while (this.messageQueue.length > 0) {
             const message = this.messageQueue.shift();
             await this.sendToChatGPT(message);
         }
-
-        localStorage.removeItem('messageQueue');
+        this.saveMessageQueue();
     }
 }
 
-// Initialize the application
-window.addEventListener('load', async () => {
-    const ui = new UIManager();
-    const registration = await PWAManager.initialize();
-    const drawingApp = new DrawingApp();
-    const messagingApp = new MessagingApp();
-
-    // Handle PWA installation
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        const installButton = document.getElementById('installPWA');
-        installButton.classList.remove('hidden');
-        
-        installButton.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User ${outcome} the installation`);
-                deferredPrompt = null;
-                installButton.classList.add('hidden');
-            }
-        });
-    });
+// Initialize the app on page load
+document.addEventListener('DOMContentLoaded', async () => {
+    new UIManager();
+    new DrawingApp();
+    new MessagingApp();
+    await PWAManager.initialize();
 });

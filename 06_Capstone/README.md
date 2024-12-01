@@ -1,7 +1,7 @@
 # DeshDrawChat PWA
 
 ## Overview
-DeshDrawChat is a Progressive Web Application (PWA) that combines a drawing tool with a chat feature, designed to function seamlessly online and offline. Users can create drawings, download their artwork, send and receive messages, and interact with the app even when offline. The application ensures that messages created while offline are queued and sent when connectivity is restored.
+YuliaDrawChat is a Progressive Web Application (PWA) that combines a drawing tool with a chat feature, designed to function seamlessly online and offline. Users can create drawings, download their artwork, send and receive messages, and interact with the app even when offline. The application ensures that messages created while offline are queued and sent when connectivity is restored.
 
 ## Features
 - **Drawing Canvas**: Users can draw using a customizable color picker and adjustable brush size.
@@ -77,5 +77,5 @@ The app supports both light and dark themes based on the user's system preferenc
 This project is licensed under the MIT License. You are free to use, modify, and distribute it as needed.
 
 ---
-Developed as a capstone project by Desh Bagley.
+Developed as a capstone project by Yulia Tarima.
 
