@@ -8,7 +8,9 @@
     },
     "dependencies": {
         "crypto-js": "^4.2.0",
-        "openai": "^4.73.1"
+        "dotenv": "^16.4.5",
+        "openai": "^4.73.1",
+        "vite": "^6.0.2"
     },
     "devDependencies": {
         "browser-sync": "^2.27.7"

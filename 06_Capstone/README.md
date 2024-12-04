@@ -1,4 +1,4 @@
-# DeshDrawChat PWA
+# YuliaDrawChat PWA
 
 ## Overview
 YuliaDrawChat is a Progressive Web Application (PWA) that combines a drawing tool with a chat feature, designed to function seamlessly online and offline. Users can create drawings, download their artwork, send and receive messages, and interact with the app even when offline. The application ensures that messages created while offline are queued and sent when connectivity is restored.
@@ -18,15 +18,22 @@ YuliaDrawChat is a Progressive Web Application (PWA) that combines a drawing too
 ## How to Run the Application
 1. Clone the repository or download the project files.
 2. Ensure all files (‘app.js’, ‘index.html’, ‘manifest.json’, ‘service-worker.js’, ‘styles.css’, and images) are in the same directory.
-3. Serve the project using a local server (e.g., [http-server](https://www.npmjs.com/package/http-server)).
+3. Serve the project using a local server.
    ```bash
-   npx http-server
+   npm start
    ```
-4. Open the provided local server URL in your web browser.
-
+4. Open the provided local server URL in your web browser, e.g.
+   ```bash
+   http://localhost:3000/
+   ```
 ## App Structure
 - **index.html**: The main HTML file with the app structure and links to other resources.
 - **app.js**: Contains the main logic for initializing the app, UI management, drawing functionality, and chat operations.
+  Collects and integrates modules from `app_modules` for overall app functionality.
+    - **DrawingApp.js**: Contains the logic for the Drawing Tool.
+    - **MessagingApp.js**: Contains the logic for the Messaging System.
+    - **PWAManager.js**: Manages PWA and Service Worker initialization.
+    - **UIManager.js**: Handles initialization of app shell elements, theme detection and application, and updates connection status on the UI.
 - **manifest.json**: Defines the PWA configuration, including app icons and theme color.
 - **service-worker.js**: Manages caching strategies, offline support, and background synchronization.
 - **offline-page.html**: A fallback page displayed when the app is accessed offline without a cached version.

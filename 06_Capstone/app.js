@@ -1,7 +1,7 @@
-import  MessagingApp  from './modules/MessagingApp.js';
-import DrawingApp from "./modules/DrawingApp.js";
-import UIManager from "./modules/UIManager.js";
-import PWAManager from "./modules/PWAManager.js";
+import MessagingApp  from './app_modules/MessagingApp.js';
+import DrawingApp from "./app_modules/DrawingApp.js";
+import UIManager from "./app_modules/UIManager.js";
+import PWAManager from "./app_modules/PWAManager.js";
 
 // Initialize the app on page load
 document.addEventListener('DOMContentLoaded', async () => {

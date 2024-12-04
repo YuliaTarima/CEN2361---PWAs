@@ -45,7 +45,7 @@ class UIManager {
         handleThemeChange(prefersDark);
     }
 
-    // Update connection status UI
+    // Update connection status on UI
     setupConnectionStatus() {
         const statusElement = document.getElementById('connectionStatus');
         const updateConnectionStatus = () => {
