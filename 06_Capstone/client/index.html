@@ -2,48 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Yulia's Draw & Chat PWA</title>
-    <meta name="description" content="Progressive Web Application combining a drawing tool
+    <meta content="Progressive Web Application combining a drawing tool
     with a chat feature, designed to function seamlessly online and offline.
     Users can create drawings, download their artwork, send and receive messages,
     and interact with the app even when offline.
     The application ensures that messages created while offline are queued and sent
-    when connectivity is restored.">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#317EFB"/>
-    <link rel="apple-touch-icon" href="YuliaCapstone.png">
-    <link rel="stylesheet" href="styles.css">
+    when connectivity is restored." name="description">
+    <link href="manifest.json" rel="manifest">
+    <meta content="#317EFB" name="theme-color"/>
+    <link href="YuliaCapstone.png" rel="apple-touch-icon">
+    <link href="styles.css" rel="stylesheet">
 </head>
 <body>
-    <div class="app-container">
-        <div class="drawing-section">
-            <h1>Happy Drawing!</h1>
-            <canvas id="drawingCanvas"></canvas>
-<!--            <div class="drawing-controls">-->
-<!--                <input type="color" id="colorPicker" value="#000000">-->
-<!--                <button id="clearCanvas">Clear the Canvas</button>-->
-<!--                <button id="downloadDrawing">Download Drawing</button>-->
-<!--            </div>-->
-            <div class="drawing-controls">
-                <label for="colorPicker">Choose Stroke Color:</label>
-                <input type="color" id="colorPicker" value="#CCCCCC">
-                <button id="clearCanvas" aria-label="Clear the drawing canvas">Clear the Canvas</button>
-                <button id="downloadDrawing" aria-label="Download the current drawing">Download Drawing</button>
-            </div>
-        </div>
-        <div class="messaging-section">
-            <h1>Happy Chattingnpm!</h1>
-            <div id="messageHistory"></div>
-            <div class="message-input">
-                <textarea id="messageInput" placeholder="Type your message..."></textarea>
-                <button id="sendMessage">Send</button>
-            </div>
-        </div>
-    </div>
-    <!-- Include the config file first -->
-    <script src="config.js"></script>
-<!--    <script src="app.js"></script>-->
-    <script type="module" src="app.js"></script>
+<!--<div class="app-container">-->
+<!--    <div class="drawing-section">-->
+<!--        <canvas id="drawingCanvas"></canvas>-->
+<!--        <div class="drawing-controls">-->
+<!--            <input id="colorPicker" type="color" value="#000000">-->
+<!--            <button id="clearCanvas">Clear</button>-->
+<!--            <button id="downloadDrawing">Download</button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="messaging-section">-->
+<!--        <div id="messageHistory"></div>-->
+<!--        <div class="message-input">-->
+<!--            <textarea id="messageInput" placeholder="Type your message..."></textarea>-->
+<!--            <button id="sendMessage">Send</button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+UIManager.initializeUI();
+
+<!-- Include the config file first -->
+<script src="config.js"></script>
+<script src="./app_modules/UIManager.js" type="module"></script>
+<script src="app.js" type="module"></script>
 </body>
 </html>

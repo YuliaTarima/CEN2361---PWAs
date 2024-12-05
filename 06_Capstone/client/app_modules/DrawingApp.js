@@ -2,7 +2,7 @@
 
 class DrawingApp {
     constructor() {
-        console.log('DrawingApp loaded!');
+        console.log('DrawingApp: loaded!');
         this.canvas = document.getElementById('drawingCanvas');
         this.ctx = this.canvas.getContext('2d');
         this.isDrawing = false;

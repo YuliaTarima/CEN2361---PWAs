@@ -1,12 +1,7 @@
-const SERVER_URL = window.env.SERVER_URL;
-if (!SERVER_URL) {
-    console.error('SERVER_URL is not defined or invalid.');
-    return;
-}
+const SERVER_URL = window.env.SERVER_URL || 'http://localhost:3000/';
 
 // Class to handle messaging functionality
 class MessagingApp {
-
     // Initialize the messaging app and set up necessary components
     constructor() {
         console.log('MessagingApp: loaded!');

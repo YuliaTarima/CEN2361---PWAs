@@ -5,7 +5,7 @@ class PWAManager {
         if ('serviceWorker' in navigator) {
             try {
                 const registration = await navigator.serviceWorker.register('/service-worker.js');
-                console.log('PWAManagerloaded!\nServiceWorker registration successful:', registration);
+                console.log('PWAManager: loaded!\nServiceWorker registration successful:', registration);
 
                 // Request notification permissions if available
                 if ('Notification' in window) {

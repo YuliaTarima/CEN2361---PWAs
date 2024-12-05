@@ -83,14 +83,18 @@ body {
 }
 
 /* Drawing Section */
-.drawing-section {
+.drawing-section, .messaging-section {
     flex: 1;
     display: flex;
     flex-direction: column;
+    width: 50%;  /* Set width to 50% */
+    height: calc(100% - 1rem);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 1rem;
+    margin-bottom: 1rem;
     background-color: var(--background-color);
+
 }
 
 .drawing-controls {
@@ -103,6 +107,7 @@ body {
 #drawingCanvas {
     flex: 1;
     border: 1px solid var(--border-color);
+    overflow: auto;
     border-radius: 4px;
     background-color: white;
     touch-action: none;
@@ -122,16 +127,6 @@ input[type="range"] {
     width: 100px;
 }
 
-/* Messaging Section */
-.messaging-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 1rem;
-    background-color: var(--background-color);
-}
 
 #messageHistory {
     flex: 1;
