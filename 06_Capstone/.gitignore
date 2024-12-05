@@ -4,4 +4,6 @@
 /client/node_modules/
 /server/node_modules/
 /server/.env/
-/server/GPT APP.postman_collection.json/
+/server/GPT_APP.postman_collection.json/
+/server/.env
+/server/GPT_APP.postman_collection.json
