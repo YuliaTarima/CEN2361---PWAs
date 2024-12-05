@@ -16,28 +16,18 @@
     <link href="styles.css" rel="stylesheet">
 </head>
 <body>
-<!--<div class="app-container">-->
-<!--    <div class="drawing-section">-->
-<!--        <canvas id="drawingCanvas"></canvas>-->
-<!--        <div class="drawing-controls">-->
-<!--            <input id="colorPicker" type="color" value="#000000">-->
-<!--            <button id="clearCanvas">Clear</button>-->
-<!--            <button id="downloadDrawing">Download</button>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div class="messaging-section">-->
-<!--        <div id="messageHistory"></div>-->
-<!--        <div class="message-input">-->
-<!--            <textarea id="messageInput" placeholder="Type your message..."></textarea>-->
-<!--            <button id="sendMessage">Send</button>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-UIManager.initializeUI();
-
 <!-- Include the config file first -->
 <script src="config.js"></script>
+
+<!-- Load the UIManager module -->
 <script src="./app_modules/UIManager.js" type="module"></script>
+
+<!-- Initialize the UI after UIManager has been loaded -->
+<script>
+    UIManager.initializeUI();
+</script>
+
+<!-- Load the app.js file after the UIManager is initialized -->
 <script src="app.js" type="module"></script>
 </body>
 </html>

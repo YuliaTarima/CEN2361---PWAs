@@ -8,7 +8,6 @@ const ASSETS_TO_CACHE = [
     '/manifest.json',
     '/offline-page.html',
     '/favicon.ico',
-    '/YuliaCapstone.png'
 
 ];
 
@@ -94,8 +93,8 @@ self.addEventListener('sync', (event) => {
 self.addEventListener('push', (event) => {
     const options = {
         body: event.data ? event.data.text() : 'New message received',
-        icon: '/YuliaCapstone.png',
-        badge: '/icons/icon-72x72.png',
+        icon: '/favicon.ico',
+        badge: '/favicon.png',
         vibrate: [100, 50, 100],
         data: {
             dateOfArrival: Date.now(),

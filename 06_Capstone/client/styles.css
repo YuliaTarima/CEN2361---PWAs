@@ -87,7 +87,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    width: 50%;  /* Set width to 50% */
+    width: 50%; /* Set width to 50% */
     height: calc(100% - 1rem);
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -126,7 +126,6 @@ input[type="color"] {
 input[type="range"] {
     width: 100px;
 }
-
 
 #messageHistory {
     flex: 1;
@@ -261,12 +260,12 @@ button:disabled {
     .app-container {
         height: auto;
     }
-    
+
     .drawing-controls,
     .message-input {
         display: none;
     }
-    
+
     #drawingCanvas {
         border: none;
     }
