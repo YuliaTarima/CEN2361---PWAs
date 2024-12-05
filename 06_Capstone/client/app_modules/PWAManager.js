@@ -1,29 +1,24 @@
-// PWA and Service Worker initialization
+import { handlePushSubscription } from './NotificationManager.js';
+
 class PWAManager {
-    // Register the service worker if supported
+    /**
+     * Initialize the PWA manager by registering the service worker.
+     * @returns {Promise<void>}
+     */
     static async initialize() {
-        // Check if the browser supports Service Workers
         if ('serviceWorker' in navigator) {
             try {
-                // Register the service worker and await its registration
-                const registration = await navigator.serviceWorker.register('/service-worker.js');
-                console.log('PWAManager: loaded!\nServiceWorker registration successful:', registration);
-
-                // Check if the Notification API is available in the browser
-                if ('Notification' in window) {
-                    // Request notification permissions from the user
-                    const permission = await Notification.requestPermission();
-                    console.log('PWA Manager: Notification permission:', permission);
-                }
-
-                // Return the service worker registration object if successful
-                return registration;
+                // Delegate push subscription logic to notifications.js
+                await handlePushSubscription();
+                console.log('PWAManager: ServiceWorker and notifications initialized.');
             } catch (error) {
-                // Log any errors during service worker registration
-                console.error('ServiceWorker registration failed:', error);
-                return null;
+                console.error('PWAManager initialization failed:', error);
             }
+        } else {
+            console.error('Service Workers are not supported in this browser.');
         }
     }
 }
+
 export default PWAManager;
+

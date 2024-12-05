@@ -77,7 +77,7 @@ app.post('/subscribe', (req, res) => {
     subscriptions.push(subscription);
     console.log('New subscription received:', subscription);
 
-    res.status(201).json({message: 'Subscription successful'});
+    res.status(201).json({message: 'Subscription created', subscription});
 });
 
 // Endpoint to send push notifications to all subscribers
@@ -85,7 +85,7 @@ app.post('/sendNotification', (req, res) => {
     const notificationPayload = {
         notification: {
             title: 'New Message!',
-            body: 'You have a new push notification.',
+            body: `Welcome to Yulia's Draw and Chat App!`,
             icon: '/favicon.ico',
             badge: '/favicon.png',
         },
