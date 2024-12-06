@@ -91,8 +91,17 @@ self.addEventListener('sync', (event) => {
 
 // Push notification handling
 self.addEventListener('push', (event) => {
+    // // Parse the data received from the push event
+    const data = event.data.json();
+    // data ? data.text() : 'New message received',
+    // event.data ? event.data.text() : 'New message received',
+    const body = data.notification.body || 'New message received';
+
+    // Log that the push notification has been received
+    console.log("service-worker: push notification received from server ", data.notification.body);
+
     const options = {
-        body: event.data ? event.data.text() : 'New message received',
+        body,
         icon: '/favicon.ico',
         badge: '/favicon.png',
         vibrate: [100, 50, 100],

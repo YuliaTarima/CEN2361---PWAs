@@ -3,10 +3,10 @@ class UIManager {
     // Constructor to initialize UIManager, set up theme handling, and connection status updates
     constructor() {
         try {
-            console.log('UIManager: loaded!');
             this.initializeUI();
             this.setupThemeHandling();
             this.setupConnectionStatus();
+            console.log('UIManager: loaded!');
         } catch (error) {
             console.error('UIManager: Error during initialization:', error);
         }

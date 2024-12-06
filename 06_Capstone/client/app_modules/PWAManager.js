@@ -1,4 +1,4 @@
-import { handlePushSubscription } from './NotificationManager.js';
+import {handlePushSubscription, notifyServerToSendPush, notificationPermissionGranted} from './NotificationManager.js';
 
 class PWAManager {
     /**
@@ -19,7 +19,13 @@ class PWAManager {
                         window.serviceWorkerRegistration = registrations[0];
                         // console.log('PWAManager: window.serviceWorkerRegistration: ', window.serviceWorkerRegistration);
                         // Ensure push subscription is handled
-                        await handlePushSubscription(registrations[0]);
+                        // Notify the server to send a welcome push notification
+                        // Check if notifications are supported and permission is granted
+                        const isNotificationPermissionGranted = notificationPermissionGranted();
+                        if (isNotificationPermissionGranted) {
+                            await handlePushSubscription(registrations[0]);
+                            await notifyServerToSendPush("onPageLoad");
+                        }
                     } else {
                         console.log('PWAManager: No service worker registration found');
                         return null; // No registration found, early return

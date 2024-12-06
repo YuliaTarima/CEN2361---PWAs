@@ -10,6 +10,10 @@ const webPush = require('web-push');
 
 const app = express();
 
+// Middleware to parse JSON
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
 // Allow all requests from all domains & localhost
 app.all('/*', function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -17,19 +21,6 @@ app.all('/*', function (req, res, next) {
     res.header("Access-Control-Allow-Methods", "POST, GET");
     next();
 });
-
-// Middleware to parse JSON
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-
-// VAPID keys for push notifications
-webPush.setVapidDetails(
-    'mailto:your-email@example.com',  // Replace with your email address
-    VAPID_KEY_PUBLIC,
-    VAPID_KEY_PRIVATE
-);
-
-let subscriptions = []; // Store subscriptions temporarily (use a DB in production)
 
 // Basic route for testing
 app.get('/', function (req, res) {
@@ -69,45 +60,130 @@ app.post('/gpt', async function (req, res) {
     }
 });
 
-// Endpoint to subscribe to push notifications
+// --------------------------------------------------------
+// Push Notifications Logic
+
+// VAPID keys for push notifications (identifying sender)
+webPush.setVapidDetails(
+    "mailto:test@test.com",
+    VAPID_KEY_PUBLIC,
+    VAPID_KEY_PRIVATE
+);
+
+// Store subscriptions
+let subscriptions = [];
+
+// Function to check if a subscription already exists
+function subscriptionExists(subscriptionFromClient) {
+    return subscriptions.some(
+        (sub) => sub.endpoint === subscriptionFromClient.endpoint
+    );
+}
+
+// Function to create a push payload
+function createPushPayloadByTriggerType(trigger, title = 'New Message!') {
+
+    const triggerType = {
+        onPageLoad: `Welcome to Yulia's Draw and Chat App!`,
+        newSubscription: `Yulia's DrawChat: New notification subscription created!`,
+        existingSubscription: `Welcome back! We are happy to see you again!`,
+        default: 'Welcome to the App!'
+    }
+    const body = triggerType[trigger] || triggerType['default'];
+
+    return JSON.stringify({
+        notification: {
+            title,
+            body,
+            // icon: '/favicon.ico',
+            // badge: '/favicon.png',
+        },
+    });
+}
+
+// Function to send push notifications to client
+async function sendPushNotification(subscription, payload) {
+    try {
+        await webPush.sendNotification(subscription, payload);
+        console.log('createPushPayloadByTriggerType: Notification sent successfully:', subscription.endpoint);
+    } catch (err) {
+        console.error('createPushPayloadByTriggerType: Error sending notification:', err);
+    }
+}
+
+// Function to send notification to all recipients
+async function sendToAllRecipients(subscriptions, notificationPayload, res) {
+    try {
+        // Wait for all notifications to be sent
+        await Promise.all(subscriptions.map(subscription => sendPushNotification(subscription, notificationPayload)));
+        console.log(`/sendNotification sent to all recipients: `, notificationPayload);
+        res.status(200).json(notificationPayload);
+    } catch (err) {
+        console.error('/sendNotification: Error sending notification', err);
+        res.status(500).json({ message: 'Error sending notification: ' + err });
+    }
+}
+
+// Function to send notification to all recipients
+async function sendToSingleRecipient(subscription, notificationPayload, res) {
+    try {
+        // Wait for all notifications to be sent
+        await sendPushNotification(subscription, notificationPayload);
+        console.log(`sendToSingleRecipient: sent: `, notificationPayload);
+        res.status(200).json(notificationPayload);
+    } catch (err) {
+        console.error('sendToSingleRecipient: error: ', err);
+        res.status(500).json({ message: 'Error sending notification: ' + err });
+    }
+}
+
+//--------------------------------------------------------
+// Subscription Endpoints
+
+// Endpoint to handle subscriptions for push notifications
 app.post('/subscribe', (req, res) => {
+    // Get push subscription object from request body
     const subscription = req.body;
 
-    // Store the subscription (you should store this in a DB)
-    subscriptions.push(subscription);
-    console.log('New subscription received:', subscription);
-
-    res.status(201).json({message: 'Subscription created', subscription});
+    (async () => {
+        try {
+            // Check if the subscription already exists
+            const userSubscribed = subscriptionExists(subscription)
+            console.log('Subscription exists: ', userSubscribed, subscription);
+            const resStatus = userSubscribed ? 200 : 201;
+            const triggerType = userSubscribed ? 'existingSubscription' : 'newSubscription';
+            if (!userSubscribed) {
+                subscriptions.push(subscription);
+            }
+            const payload = createPushPayloadByTriggerType(triggerType);
+            const notification = await sendPushNotification(subscription, payload);
+            return res.status(resStatus).json({notification, subscription});
+        } catch (err) {
+            console.error('Error sending push notification:', err);
+            return res.status(500).json({
+                message: `/subscribe: Error sending push notification`,
+                error: err
+            });
+        }
+    })(); // Immediately invoke the async function
+    return; // Prevent further execution of the route handler
 });
 
 // Endpoint to send push notifications to all subscribers
 app.post('/sendNotification', (req, res) => {
-const {trigger, subscription} = req.body;
-    console.log('req.body', req.body);
-    const triggerType ={
-        onPageLoad: `Welcome to Yulia's Draw and Chat App!`,
-    }
+    const {trigger, subscription} = req.body;
+    console.log('/sendNotification trigger ', trigger);
+    const notificationPayload = createPushPayloadByTriggerType(trigger);
 
-    const notificationPayload = {
-        notification: {
-            title: 'New Message!',
-            body: triggerType[trigger],
-            icon: '/favicon.ico',
-            badge: '/favicon.png',
-        },
-    };
-
-    // Send the notification to all subscribers
-    Promise.all(subscriptions.map(sub => {
-        return webPush.sendNotification(sub, notificationPayload);
-    }))
-        .then(() => {
-            res.status(200).json(notificationPayload);
-        })
-        .catch(err => {
-            console.error('Error sending notification', err);
-            res.status(500).json({message: 'Error sending notification: '+ err});
-        });
+    (async () => {
+        try {
+            await sendToSingleRecipient(subscription, notificationPayload, res)
+        } catch (err) {
+            console.error('/sendNotification: Error sending notification', err);
+            res.status(500).json({message: 'Error sending notification: ' + err});
+        }
+    })(); // Immediately invoke the async function
+    return; // Prevent further execution of the route handler
 });
 
 // Start the server
