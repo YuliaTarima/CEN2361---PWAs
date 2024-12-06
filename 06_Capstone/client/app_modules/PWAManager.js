@@ -6,19 +6,37 @@ class PWAManager {
      * @returns {Promise<void>}
      */
     static async initialize() {
-        if ('serviceWorker' in navigator) {
-            try {
-                // Delegate push subscription logic to notifications.js
-                await handlePushSubscription();
-                console.log('PWAManager: ServiceWorker and notifications initialized.');
-            } catch (error) {
-                console.error('PWAManager initialization failed:', error);
+        try {
+            if ('serviceWorker' in navigator) {
+                try {
+                    // Check if service workers are already registered
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+
+                    if (registrations.length > 0) {
+                        window.isServiceWorkerRegistered = true;
+                        // console.log('PWAManager: window.isServiceWorkerRegistered: ', window.isServiceWorkerRegistered);
+                        // Return the first registration found
+                        window.serviceWorkerRegistration = registrations[0];
+                        // console.log('PWAManager: window.serviceWorkerRegistration: ', window.serviceWorkerRegistration);
+                        // Ensure push subscription is handled
+                        await handlePushSubscription(registrations[0]);
+                    } else {
+                        console.log('PWAManager: No service worker registration found');
+                        return null; // No registration found, early return
+                    }
+                } catch (error) {
+                    console.error('PWAManager: Error checking service worker registration:', error);
+                    return null; // Error occurred, return null
+                }
+            } else {
+                console.error('PWAManager: Service Workers are not supported in this browser.');
+                return null; // Service workers are not supported, return null
             }
-        } else {
-            console.error('Service Workers are not supported in this browser.');
+        } catch (error) {
+            console.error('PWAManager: Unexpected error:', error);
+            return null; // Unexpected error, return null
         }
     }
 }
 
 export default PWAManager;
-

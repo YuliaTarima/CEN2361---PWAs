@@ -1,92 +1,101 @@
+const SERVER_URL = `${window.env.SERVER_URL}` || 'http://localhost:6069';
+
 /**
  * Handle push subscription for notifications.
  * @returns {Promise<void>}
  */
 export async function handlePushSubscription() {
-    if ('serviceWorker' in navigator) {
-        try {
-            // Register the service worker
-            const registration = await navigator.serviceWorker.register('/service-worker.js');
-            console.log('ServiceWorker registered:', registration);
+    // Check if notifications are supported and permission is granted
+    if ('Notification' in window) {
+        const permission = await Notification.requestPermission();
+        console.log('Notification permission:', permission);
 
-            // Check if notifications are supported and permission is granted
-            if ('Notification' in window) {
-                const permission = await Notification.requestPermission();
-                console.log('Notification permission:', permission);
+        if (permission === 'granted') {
+            const subscription = await getPushSubscription();
 
-                if (permission === 'granted') {
-                    const subscription = await getPushSubscription(registration);
-                    if (subscription) {
-                        await sendSubscriptionToServer(subscription);
-                        console.log('Push subscription successfully handled.');
-                    }
-                }
+            if (!subscription) { // Check if the subscription does NOT exist
+                const newSubscription = await createPushSubscription();
+                console.log('handlePushSubscription: New push subscription successfully created and sent to server.');
+
+            } else {
+                console.log('handlePushSubscription: Existing subscription found. No action needed.');
             }
-        } catch (error) {
-            console.error('Error handling push subscription:', error);
         }
-    } else {
-        console.error('Service Workers are not supported in this browser.');
     }
 }
 
-/**
- * Get or create a push subscription.
- * @param {ServiceWorkerRegistration} registration
- * @returns {Promise<PushSubscription>}
- */
-async function getPushSubscription(registration) {
-    const subscription = await registration.pushManager.getSubscription();
-    if (subscription) {
-        console.log('Existing subscription found:', subscription);
-        return subscription;
-    }
-
-    // Create a new subscription
-    const publicKey = window.env.VAPID_KEY_PUBLIC; // Replace with your actual public VAPID key
-    const applicationServerKey = urlBase64ToUint8Array(publicKey);
-    return await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey,
-    });
-}
 
 /**
- * Send push subscription to the server.
- * @param {PushSubscription} subscription
+ * Send the push subscription to the server.
+ * @param {PushSubscription} subscription - The push subscription object.
+ * @returns {Promise<void>}
  */
-async function sendSubscriptionToServer(subscription) {
+async function createPushSubscription(subscription) {
     try {
-        const response = await fetch('http://localhost:6069/subscribe', {
+        const response = await fetch(`${SERVER_URL}/subscribe`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(subscription),
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({subscription}),
         });
 
         if (!response.ok) {
-            throw new Error('Failed to send subscription to server');
+            throw new Error('createPushSubscription: Failed to send subscription to server');
         }
+        console.log('createPushSubscription: Subscription sent to server successfully.', response.body);
 
-        console.log('Push subscription sent to server successfully.');
     } catch (error) {
         console.error('Error sending subscription to server:', error);
     }
 }
 
+
 /**
- * Convert VAPID public key from base64 to Uint8Array.
- * @param {string} base64String
+ * Get or create a push subscription.
+ * @returns {Promise<PushSubscription>}
+ */
+async function getPushSubscription() {
+    const subscription = await serviceWorkerRegistration.pushManager.getSubscription();
+    console.log('getPushSubscription: Existing subscription found:', subscription);
+    return subscription ? subscription : null;
+}
+
+
+export async function notifyServerToSendPush(trigger) {
+    const subscription = await getPushSubscription();
+    if (!subscription || !subscription.endpoint) {
+        throw new Error('notifyServerToSendPush: Invalid subscription: Missing endpoint.');
+    }
+    const payload = {trigger, subscription};
+
+    // Send the subscription and message to the server to trigger a push notification
+    const response = await fetch(`${SERVER_URL}/sendNotification`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({trigger, subscription}),
+    });
+
+    if (!response.ok) {
+        throw new Error('NotificationManager: Server error sending push notification');
+    }
+    console.log('NotificationManager: server response', response.json());
+
+}
+
+/**
+ * Utility function to convert VAPID public key to a Uint8Array.
+ * @param {string} base64Url - Base64 URL encoded string of the VAPID public key.
  * @returns {Uint8Array}
  */
-function urlBase64ToUint8Array(base64String) {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
+function urlBase64ToUint8Array(base64Url) {
+    const padding = '='.repeat((4 - base64Url.length % 4) % 4); // Add padding to make it valid base64 string
+    const base64 = (base64Url + padding).replace(/\-/g, '+').replace(/_/g, '/'); // Convert from base64url to base64
+    const rawData = atob(base64); // Decode base64 string
+    const outputArray = new Uint8Array(rawData.length); // Create an array to store the decoded data
+
     for (let i = 0; i < rawData.length; ++i) {
-        outputArray[i] = rawData.charCodeAt(i);
+        outputArray[i] = rawData.charCodeAt(i); // Fill the array with the decoded data
     }
     return outputArray;
 }
+
+

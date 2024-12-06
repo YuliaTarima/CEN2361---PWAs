@@ -1,4 +1,4 @@
-const SERVER_URL = window.env.SERVER_URL || 'http://localhost:3000/';
+const SERVER_URL = `${window.env.SERVER_URL}/gpt` || 'http://localhost:6069/gpt';
 
 // Class to handle messaging functionality
 class MessagingApp {

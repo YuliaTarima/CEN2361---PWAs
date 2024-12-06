@@ -82,10 +82,16 @@ app.post('/subscribe', (req, res) => {
 
 // Endpoint to send push notifications to all subscribers
 app.post('/sendNotification', (req, res) => {
+const {trigger, subscription} = req.body;
+    console.log('req.body', req.body);
+    const triggerType ={
+        onPageLoad: `Welcome to Yulia's Draw and Chat App!`,
+    }
+
     const notificationPayload = {
         notification: {
             title: 'New Message!',
-            body: `Welcome to Yulia's Draw and Chat App!`,
+            body: triggerType[trigger],
             icon: '/favicon.ico',
             badge: '/favicon.png',
         },
@@ -93,14 +99,14 @@ app.post('/sendNotification', (req, res) => {
 
     // Send the notification to all subscribers
     Promise.all(subscriptions.map(sub => {
-        return webPush.sendNotification(sub, JSON.stringify(notificationPayload));
+        return webPush.sendNotification(sub, notificationPayload);
     }))
         .then(() => {
-            res.status(200).json({message: 'Notification sent successfully!'});
+            res.status(200).json(notificationPayload);
         })
         .catch(err => {
             console.error('Error sending notification', err);
-            res.status(500).json({message: 'Error sending notification'});
+            res.status(500).json({message: 'Error sending notification: '+ err});
         });
 });
 
