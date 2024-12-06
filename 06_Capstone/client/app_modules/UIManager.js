@@ -20,7 +20,7 @@ class UIManager {
                 <div class="app-header">
                     <h1>Yulia's Drawing and Chatting App</h1>
                     <div class="connection-status" id="connectionStatus"></div>
-                    <button id="installPWA">Install App</button>
+                    <button id="installPWA" class="hidden">Install App</button>
                 </div>
                 <div class="app-container">
                     <div class="drawing-section">
@@ -41,6 +41,27 @@ class UIManager {
                     </div>
                 </div>
             `;
+
+            // Handle PWA installation
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                const installButton = document.getElementById('installPWA');
+                installButton.classList.remove('hidden');
+
+                installButton.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const {outcome} = await deferredPrompt.userChoice;
+                        console.log(`User ${outcome} the installation`);
+                        deferredPrompt = null;
+                        installButton.classList.add('hidden');
+                    }
+                });
+            });
+
+
         } catch (error) {
             console.error('UIManager: Error initializing UI components:', error);
         }

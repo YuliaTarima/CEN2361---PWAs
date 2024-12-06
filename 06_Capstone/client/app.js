@@ -15,6 +15,8 @@ import PWAManager from "./app_modules/PWAManager.js";
                 new MessagingApp();
                 await PWAManager.initialize();
 
+
+
             } catch (error) {
                 console.error("App.js: Error Initializing app modules:", error);
             }
